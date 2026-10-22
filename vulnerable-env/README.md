@@ -55,9 +55,10 @@ record:
    ```
 
 5. Open:
-   - Site: http://localhost:8080/
-   - WebDAV share (digest auth): http://localhost:8080/dav/
+   - Site: http://localhost:8080/ (served from `public/` — the Fieldstone Docs portal)
+   - WebDAV share (digest auth): http://localhost:8080/dav/ (served from `www/`)
    - Reverse-proxied path: http://localhost:8080/proxy/
+   - Team CVE map (internal reference): http://localhost:8080/cve-map.html
 
 6. Check both containers are up: `docker compose ps`
 7. Tear down when done: `docker compose down`

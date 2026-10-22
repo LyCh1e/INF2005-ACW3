@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Fieldstone Docs — Internal Portal</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <span class="logo">◆</span>
+      <span class="brand-name">Fieldstone Docs</span>
+      <span class="brand-sub">internal portal</span>
+    </div>
+    <nav class="topnav">
+      <a href="/">Home</a>
+      <a href="login.html">Shared Drive</a>
+      <a href="/proxy/">News Mirror</a>
+      <a href="about.html">About</a>
+    </nav>
+    <div class="userchip">
+      <span class="avatar">PT</span>
+      <span class="username">Priya T.</span>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="hero">
+      <div>
+        <h1>Good afternoon, Priya.</h1>
+        <p class="lede">
+          You have <strong>3 new files</strong> in the shared drive and
+          <strong>1 pending</strong> review request. The news mirror finished
+          its latest sync 14 minutes ago.
+        </p>
+      </div>
+      <div class="hero-stats">
+        <div class="stat"><span class="stat-n">128</span><span class="stat-l">files</span></div>
+        <div class="stat"><span class="stat-n">6</span><span class="stat-l">members</span></div>
+        <div class="stat"><span class="stat-n">14m</span><span class="stat-l">last sync</span></div>
+      </div>
+    </section>
+
+    <section class="grid-2">
+      <article class="panel">
+        <header class="panel-head">
+          <h2>Recent files</h2>
+          <a class="link" href="login.html">Open shared drive →</a>
+        </header>
+        <table class="filetable">
+          <thead>
+            <tr><th>Name</th><th>Owner</th><th>Modified</th><th class="num">Size</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><span class="ico">📄</span> <a href="/dav/Q3-financial-summary.txt">Q3-financial-summary.txt</a></td><td>Daniel K.</td><td>today, 14:02</td><td class="num">812 B</td></tr>
+            <tr><td><span class="ico">📊</span> <a href="/dav/onboarding-metrics.csv">onboarding-metrics.csv</a></td><td>Priya T.</td><td>today, 11:48</td><td class="num">420 B</td></tr>
+            <tr><td><span class="ico">📝</span> <a href="/dav/client-brief-arcwell.md">client-brief-arcwell.md</a></td><td>Marcus L.</td><td>yesterday</td><td class="num">1.2 KB</td></tr>
+            <tr><td><span class="ico">📄</span> <a href="/dav/vendor-contract-redline.txt">vendor-contract-redline.txt</a></td><td>Hui En N.</td><td>21 Oct</td><td class="num">930 B</td></tr>
+            <tr><td><span class="ico">📝</span> <a href="/dav/all-hands-notes-oct.md">all-hands-notes-oct.md</a></td><td>Daniel K.</td><td>20 Oct</td><td class="num">1.1 KB</td></tr>
+            <tr><td><span class="ico">ℹ️</span> <a href="/dav/README.txt">README.txt</a></td><td>Arjun K.</td><td>18 Oct</td><td class="num">640 B</td></tr>
+          </tbody>
+        </table>
+      </article>
+
+      <article class="panel">
+        <header class="panel-head">
+          <h2>Announcements</h2>
+          <span class="pill">3 new</span>
+        </header>
+        <ul class="feed">
+          <li>
+            <div class="feed-head">
+              <strong>IT:</strong> Shared drive maintenance
+              <span class="feed-time">today</span>
+            </div>
+            <p>
+              We're rolling out a storage upgrade on Saturday 25 Oct from
+              22:00. Expect <code>/dav/</code> to be read-only for about an
+              hour. Save local copies if you'll be working late.
+            </p>
+          </li>
+          <li>
+            <div class="feed-head">
+              <strong>Comms:</strong> News mirror now shows weekend edition
+              <span class="feed-time">yesterday</span>
+            </div>
+            <p>
+              The <a href="/proxy/">news mirror</a> now pulls the weekend
+              edition too. If a page shows garbled characters, let IT know —
+              there's a known rendering issue with the encoding filter.
+            </p>
+          </li>
+          <li>
+            <div class="feed-head">
+              <strong>People:</strong> Welcome Hui En
+              <span class="feed-time">20 Oct</span>
+            </div>
+            <p>
+              Hui En joined the Platform team on Monday. Say hi on the
+              <code>#platform</code> channel — she'll be shadowing Daniel on
+              the Arcwell account for the first two weeks.
+            </p>
+          </li>
+        </ul>
+      </article>
+    </section>
+
+    <section class="grid-3">
+      <article class="panel">
+        <header class="panel-head"><h2>Pinned links</h2></header>
+        <ul class="linklist">
+          <li><a href="login.html">📁 Shared drive (WebDAV)</a></li>
+          <li><a href="/proxy/">📰 News mirror</a></li>
+          <li><a href="about.html">ℹ️  About this portal</a></li>
+          <li><a href="/dav/all-hands-notes-oct.md">📝 All-hands notes (Oct)</a></li>
+          <li><a href="/dav/Q3-financial-summary.txt">📄 Q3 financial summary</a></li>
+          <li><a href="cve-map.html">🛠️  Team CVE map (internal)</a></li>
+        </ul>
+      </article>
+
+      <article class="panel">
+        <header class="panel-head"><h2>Team</h2></header>
+        <ul class="teamlist">
+          <li><span class="avatar sm">PT</span><div><strong>Priya T.</strong><span class="role">Portal lead</span></div></li>
+          <li><span class="avatar sm">DK</span><div><strong>Daniel K.</strong><span class="role">Finance</span></div></li>
+          <li><span class="avatar sm">ML</span><div><strong>Marcus L.</strong><span class="role">Accounts</span></div></li>
+          <li><span class="avatar sm">SR</span><div><strong>Sofia R.</strong><span class="role">Design</span></div></li>
+          <li><span class="avatar sm">HN</span><div><strong>Hui En N.</strong><span class="role">Platform</span></div></li>
+          <li><span class="avatar sm">AK</span><div><strong>Arjun K.</strong><span class="role">IT</span></div></li>
+        </ul>
+      </article>
+
+      <article class="panel">
+        <header class="panel-head"><h2>Activity</h2></header>
+        <ul class="activity">
+          <li><span class="dot ok"></span><strong>Daniel K.</strong> uploaded <code>Q3-financial-summary.pdf</code><span class="feed-time">14:02</span></li>
+          <li><span class="dot ok"></span><strong>Priya T.</strong> edited <code>onboarding-metrics.xlsx</code><span class="feed-time">11:48</span></li>
+          <li><span class="dot info"></span>News mirror re-synced from upstream<span class="feed-time">10:36</span></li>
+          <li><span class="dot ok"></span><strong>Marcus L.</strong> locked <code>client-brief-arcwell.docx</code> for editing<span class="feed-time">09:11</span></li>
+          <li><span class="dot warn"></span>Digest auth: 4 failed logins from <code>10.42.0.18</code><span class="feed-time">08:52</span></li>
+          <li><span class="dot ok"></span><strong>Sofia R.</strong> replaced <code>brand-refresh-draft.png</code><span class="feed-time">yesterday</span></li>
+        </ul>
+      </article>
+    </section>
+
+    <section class="notice">
+      <strong>Lab notice.</strong>
+      This is the ACW3 target site for Group P1-6. It is deliberately
+      vulnerable and must only run on an isolated VM or lab network. Do not
+      expose port 8080 to the public internet. All names, files, and
+      activity on this page are fake sample data.
+    </section>
+  </main>
+
+  <footer class="footer">
+    <span>Fieldstone Docs · P1-6 lab build · 2026</span>
+    <span><a href="cve-map.html">Team CVE map</a> · <a href="about.html">About</a></span>
+  </footer>
+</body>
+</html>

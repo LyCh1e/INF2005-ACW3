@@ -1,0 +1,24 @@
+VENDOR CONTRACT — REDLINE PASS 3
+Vendor:  Brightline Logistics Pte Ltd
+Owner:   Marcus L.
+Date:    21 Oct 2026
+
+CHANGES ACCEPTED
+  - Payment terms: Net 30 (was Net 45).
+  - Reporting cadence: monthly dashboard + quarterly review.
+  - Mutual NDA scope extended to cover platform migration work.
+
+CHANGES REJECTED
+  - Blanket IP assignment on all deliverables — we agreed to work-for-hire
+    for assets created under this SOW only, as per prior agreements.
+  - Automatic 3-year renewal — we need an opt-out notice at 60 days.
+
+OPEN POINTS FOR NEXT PASS
+  - Liability cap: we propose 12 months of fees; they still have "greater
+    of 12 months or SGD 500k". Needs legal.
+  - Audit rights: scope and frequency.
+
+NOTES
+  - Legal reviewed up to section 7. Sections 8-11 (indemnity, insurance,
+    dispute resolution) still pending.
+  - Keep the signed PDF in this folder when it comes back.

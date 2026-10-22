@@ -16,6 +16,7 @@ services:
       - ./conf/httpd-vuln.conf:/usr/local/apache2/conf/extra/httpd-vuln.conf:ro
       - ./conf/digest.passwd:/usr/local/apache2/conf/digest.passwd:ro
       - ./conf/davlock:/usr/local/apache2/davlock:rw
+      - ./public:/usr/local/apache2/htdocs:ro
       - ./www:/usr/local/apache2/htdocs/dav:rw
     command: >
       sh -c "

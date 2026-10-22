@@ -1,0 +1,28 @@
+FIELDSTONE DOCS — Q3 FINANCIAL SUMMARY (INTERNAL)
+Prepared by: Daniel K.
+Reviewed by: Priya T.
+Period: 01 Jul 2026 – 30 Sep 2026
+
+1. HEADLINE NUMBERS
+   - Revenue (Q3):         SGD   1,284,500
+   - Operating expenses:   SGD     912,340
+   - Net margin:                     28.9 %
+   - Cash runway:                    14 months
+
+2. REVENUE BY ACCOUNT
+   Account              Q2 (SGD)     Q3 (SGD)    QoQ
+   -----------------    ---------    ---------   -------
+   Arcwell Holdings       412,800      438,100   +6.1 %
+   Brightline Logistics   218,400      231,900   +6.2 %
+   Cedar & Vane            96,500       78,200  -19.0 %
+   Deltawise               65,300      112,400  +72.1 %
+   Everlee Marketing      126,900      133,500   +5.2 %
+   Other / spot work      224,100      290,400  +29.6 %
+
+3. NOTES
+   - Cedar & Vane paused new engagements pending internal restructuring.
+   - Deltawise ramp exceeded forecast — see Marcus's handover doc.
+   - A full breakdown with per-project margins is in
+     onboarding-metrics.xlsx (same folder).
+
+-- END OF DOCUMENT --

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>About — Fieldstone Docs</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <span class="logo">◆</span>
+      <span class="brand-name">Fieldstone Docs</span>
+      <span class="brand-sub">internal portal</span>
+    </div>
+    <nav class="topnav">
+      <a href="/">Home</a>
+      <a href="login.html">Shared Drive</a>
+      <a href="/proxy/">News Mirror</a>
+      <a href="about.html">About</a>
+    </nav>
+  </header>
+
+  <main class="wrap">
+    <section class="page">
+      <h1>About this portal</h1>
+      <p>
+        Fieldstone Docs is the small internal portal our team uses to share
+        files and read a mirrored copy of a public news feed. It runs on an
+        Apache httpd 2.4.68 box in the lab and is only reachable from inside
+        the lab network.
+      </p>
+
+      <h2>What's here</h2>
+      <ul>
+        <li>
+          <strong>Shared drive</strong> at <code>/dav/</code> — a WebDAV share
+          where team members can read, upload, edit, and delete files. It
+          requires HTTP Digest authentication (realm <code>acw3-dav</code>).
+        </li>
+        <li>
+          <strong>News mirror</strong> at <code>/proxy/</code> — a reverse
+          proxy to a small backend service. The backend accepts a few query
+          parameters so we can shape the response (declared vs. actual
+          charset, truncation, transfer-encoding) while we debug a rendering
+          issue with the <code>proxy-html</code> output filter.
+        </li>
+      </ul>
+
+      <h2>Credentials</h2>
+      <p>
+        The default lab user is <code>labuser</code> in the realm
+        <code>acw3-dav</code>. The password is set per the quick-start steps in
+        <code>vulnerable-env/README.md</code> and is not published on this
+        page.
+      </p>
+
+      <h2>Contact</h2>
+      <p>
+        This is the ACW3 target site maintained by Group P1-6 of INF2005
+        (Cyber Security Fundamentals). For questions about the lab setup, ask
+        on the team channel; for anything about the course, see the module
+        page on xSite.
+      </p>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <span>Fieldstone Docs · P1-6 lab build · 2026</span>
+    <span><a href="cve-map.html">Team CVE map</a></span>
+  </footer>
+</body>
+</html>

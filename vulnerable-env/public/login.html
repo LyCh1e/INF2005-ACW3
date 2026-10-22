@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Sign in — Fieldstone Docs</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body class="login-body">
+  <main class="login-wrap">
+    <div class="login-card">
+      <div class="login-brand">
+        <span class="logo">◆</span>
+        <span class="brand-name">Fieldstone Docs</span>
+      </div>
+      <h1>Sign in to the shared drive</h1>
+      <p class="login-sub">
+        Use your Fieldstone portal account. Access is logged.
+      </p>
+
+      <form id="loginForm" class="login-form" autocomplete="off">
+        <label>
+          <span>Username</span>
+          <input id="username" name="username" type="text"
+                 required autocomplete="username" autofocus>
+        </label>
+        <label>
+          <span>Password</span>
+          <input id="password" name="password" type="password"
+                 required autocomplete="current-password">
+        </label>
+        <div id="loginError" class="login-error" hidden>
+          Invalid username or password. Please try again.
+        </div>
+        <button id="loginBtn" class="btn primary wide" type="submit">
+          Sign in
+        </button>
+      </form>
+
+      <div class="login-hint">
+        <strong>Lab credentials:</strong>
+        <code>labuser</code> / <code>labpass123</code>
+      </div>
+
+      <p class="login-foot">
+        Having trouble? Contact IT (Arjun K.) &middot;
+        <a href="/">Back to portal</a>
+      </p>
+    </div>
+  </main>
+
+  <script>
+    const form   = document.getElementById('loginForm');
+    const errBox = document.getElementById('loginError');
+    const btn    = document.getElementById('loginBtn');
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      errBox.hidden = true;
+      btn.disabled  = true;
+      btn.textContent = 'Signing in…';
+
+      const user = document.getElementById('username').value;
+      const pass = document.getElementById('password').value;
+
+      // XMLHttpRequest.open() with username/password drives the Digest
+      // handshake natively and caches the credentials in the browser's
+      // auth cache for the realm. After a 200 response, navigating to
+      // /dav/ reuses the cached creds and does NOT re-prompt.
+      const xhr = new XMLHttpRequest();
+      xhr.open('GET', '/dav/', true, user, pass);
+      xhr.onload = () => {
+        if (xhr.status === 200) {
+          // Mark that the user went through our login page (for UX only).
+          try { sessionStorage.setItem('fieldstone.loggedIn', '1'); } catch (_) {}
+          window.location.href = '/dav/';
+        } else {
+          showError();
+        }
+      };
+      xhr.onerror = showError;
+      xhr.send();
+
+      function showError() {
+        errBox.hidden = false;
+        btn.disabled  = false;
+        btn.textContent = 'Sign in';
+      }
+    });
+  </script>
+</body>
+</html>
