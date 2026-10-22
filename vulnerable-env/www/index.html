@@ -2,22 +2,79 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>ACW3 Mock Site - P1-6</title>
+  <title>ACW3 Target Site (Group P1-6)</title>
   <style>
-    body { font-family: sans-serif; max-width: 640px; margin: 40px auto; line-height: 1.5; }
-    code { background: #f0f0f0; padding: 2px 5px; }
+    body { font-family: sans-serif; max-width: 760px; margin: 40px auto; line-height: 1.5; padding: 0 16px; }
+    code { background: #f0f0f0; padding: 2px 5px; border-radius: 3px; }
+    table { border-collapse: collapse; width: 100%; margin: 12px 0; }
+    th, td { border: 1px solid #ccc; padding: 6px 10px; text-align: left; font-size: 0.95em; }
+    th { background: #f5f5f5; }
+    .badge { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 0.8em; font-weight: bold; }
+    .high { background: #fde2e2; color: #a40000; }
+    .warn { background: #fff4e5; border: 1px solid #ffd8a8; padding: 10px 14px; border-radius: 6px; margin: 16px 0; }
+    footer { margin-top: 32px; font-size: 0.85em; color: #666; }
   </style>
 </head>
 <body>
   <h1>ACW3 Target Site (Group P1-6)</h1>
-  <p>This is a deliberately vulnerable mock site used only for the ACW3 pen-testing demo,
-     run on an isolated lab network / VM. It is not for production use.</p>
+  <p>
+    Deliberately vulnerable mock environment for the ACW3 pentest demo. Backed by
+    Apache HTTP Server <code>2.4.68</code> (fixed in <code>2.4.69</code>), run only
+    on an isolated lab network / VM. <strong>Not for production use, and never
+    expose these ports to the internet.</strong>
+  </p>
 
-  <h2>Areas to test</h2>
+  <div class="warn">
+    This page is a map of what to test, not an exploit tool. Identification and
+    exploitation steps are worked out by the team from each official CVE record,
+    per the assignment spec.
+  </div>
+
+  <h2>Test areas</h2>
+  <table>
+    <tr><th>Path</th><th>CVE</th><th>Component</th><th>Severity</th><th>Precondition wired up</th></tr>
+    <tr>
+      <td><code>/dav/</code></td>
+      <td>CVE-2026-93546</td>
+      <td>mod_dav_fs</td>
+      <td><span class="badge high">High 8.8</span></td>
+      <td>WebDAV on, digest-authenticated user has write access</td>
+    </tr>
+    <tr>
+      <td><code>/dav/</code></td>
+      <td>CVE-2026-73636</td>
+      <td>mod_auth_digest</td>
+      <td><span class="badge high">High 8.1</span></td>
+      <td><code>AuthDigestNonceLifetime 0</code></td>
+    </tr>
+    <tr>
+      <td><code>/proxy/</code></td>
+      <td>CVE-2026-63686</td>
+      <td>mod_xml2enc</td>
+      <td><span class="badge high">High 7.5</span></td>
+      <td>Reverse-proxied backend, response charset/encoding configurable for testing</td>
+    </tr>
+  </table>
+
+  <h2>Access notes</h2>
   <ul>
-    <li><code>/dav/</code> — WebDAV share (digest auth required) — CVE-2026-93546</li>
-    <li><code>/dav/</code> — digest auth session — CVE-2026-73636</li>
-    <li><code>/proxy/</code> — reverse-proxied backend — CVE-2026-63686</li>
+    <li><code>/dav/</code> requires HTTP Digest auth. Credentials are set up locally per
+      <a href="../README.md"><code>vulnerable-env/README.md</code></a> (default lab user: <code>labuser</code>,
+      realm <code>acw3-dav</code>) — not published here.</li>
+    <li><code>/proxy/</code> forwards to the internal backend service; see
+      <code>backend/server.py</code> for the response parameters it accepts
+      (content type, charset, transfer-encoding) while probing for the
+      mod_xml2enc trigger condition.</li>
   </ul>
+
+  <h2>Official CVE records</h2>
+  <ul>
+    <li><a href="https://www.cve.org/CVERecord?id=CVE-2026-93546">CVE-2026-93546</a></li>
+    <li><a href="https://www.cve.org/CVERecord?id=CVE-2026-73636">CVE-2026-73636</a></li>
+    <li><a href="https://www.cve.org/CVERecord?id=CVE-2026-63686">CVE-2026-63686</a></li>
+    <li><a href="https://httpd.apache.org/security/vulnerabilities_24.html">Apache httpd 2.4.x vendor advisory index</a></li>
+  </ul>
+
+  <footer>ACW3 Group P1-6 &middot; lab environment &middot; last updated 2026-10-22</footer>
 </body>
 </html>
