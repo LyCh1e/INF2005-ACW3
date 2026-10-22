@@ -1,0 +1,39 @@
+# Vulnerable lab environment for ACW3 (Group P1-6).
+# Targets three CVEs against Apache HTTP Server 2.4.68 (fixed in 2.4.69):
+#   - CVE-2026-93546 mod_dav_fs   (WebDAV PROPPATCH namespace overflow)
+#   - CVE-2026-73636 mod_auth_digest (digest nonce replay, needs AuthDigestNonceLifetime 0)
+#   - CVE-2026-63686 mod_xml2enc (NULL pointer deref via proxied charset conversion)
+#
+# DO NOT expose these ports beyond your own isolated pentest network/VM.
+
+services:
+  target:
+    image: httpd:2.4.68
+    container_name: acw3-target
+    ports:
+      - "8080:80"
+    volumes:
+      - ./conf/httpd-vuln.conf:/usr/local/apache2/conf/extra/httpd-vuln.conf:ro
+      - ./conf/digest.passwd:/usr/local/apache2/conf/digest.passwd:ro
+      - ./conf/davlock:/usr/local/apache2/davlock:rw
+      - ./www:/usr/local/apache2/htdocs/dav:rw
+    command: >
+      sh -c "
+      grep -qxF 'Include conf/extra/httpd-vuln.conf' /usr/local/apache2/conf/httpd.conf ||
+      echo 'Include conf/extra/httpd-vuln.conf' >> /usr/local/apache2/conf/httpd.conf &&
+      httpd-foreground
+      "
+    networks:
+      - labnet
+
+  backend:
+    build: ./backend
+    container_name: acw3-backend
+    networks:
+      - labnet
+    # Not published externally; reached only via the target's reverse proxy
+    # so the mod_xml2enc CVE is triggered through a proxied response.
+
+networks:
+  labnet:
+    driver: bridge

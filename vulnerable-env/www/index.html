@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>ACW3 Mock Site - P1-6</title>
+  <style>
+    body { font-family: sans-serif; max-width: 640px; margin: 40px auto; line-height: 1.5; }
+    code { background: #f0f0f0; padding: 2px 5px; }
+  </style>
+</head>
+<body>
+  <h1>ACW3 Target Site (Group P1-6)</h1>
+  <p>This is a deliberately vulnerable mock site used only for the ACW3 pen-testing demo,
+     run on an isolated lab network / VM. It is not for production use.</p>
+
+  <h2>Areas to test</h2>
+  <ul>
+    <li><code>/dav/</code> — WebDAV share (digest auth required) — CVE-2026-93546</li>
+    <li><code>/dav/</code> — digest auth session — CVE-2026-73636</li>
+    <li><code>/proxy/</code> — reverse-proxied backend — CVE-2026-63686</li>
+  </ul>
+</body>
+</html>

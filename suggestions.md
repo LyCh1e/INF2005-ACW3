@@ -53,6 +53,29 @@
 - Two people per vulnerability: one runs the exploit, one explains the remediation.
 - Every member must be able to explain at least one vulnerability end to end, since the instructors can ask anyone.
 
+## Target Environment
+
+A starter target environment is in [`vulnerable-env/`](vulnerable-env/): Apache HTTP
+Server 2.4.68 (the version all three CVEs affect; fixed in 2.4.69) in Docker, with
+WebDAV, digest auth, and a reverse proxy already enabled and configured to match each
+CVE record's stated precondition:
+
+| CVE | Config precondition wired up |
+|---|---|
+| CVE-2026-93546 (mod_dav_fs) | `/dav/` has WebDAV on, writable by an authenticated digest user. |
+| CVE-2026-73636 (mod_auth_digest) | `AuthDigestNonceLifetime` set to 0, as the record requires. |
+| CVE-2026-63686 (mod_xml2enc) | `/proxy/` reverse-proxies to a backend service your team still needs to build. |
+
+See [`vulnerable-env/README.md`](vulnerable-env/README.md) for how to run it and links
+to each official CVE record and the Apache vendor advisory.
+
+**What's still on your team to work out** (the spec expects this, not a pre-built
+exploit): the actual PROPPATCH payload for CVE-2026-93546, the replay mechanics for
+CVE-2026-73636, and the backend response that triggers the mod_xml2enc NULL pointer
+dereference for CVE-2026-63686. None of the three records has a public PoC, so start
+from the vendor advisory and the Apache 2.4.69 changelog/diff (what changed between
+2.4.68 and 2.4.69 for each module) to work out the trigger condition.
+
 ## Next Steps
 
 1. Email the instructors to get the 3 CVEs approved before starting.
