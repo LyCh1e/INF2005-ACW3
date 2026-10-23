@@ -25,6 +25,90 @@ record:
   stand up yourselves — see the CVE record for what response triggers the NULL pointer
   dereference.
 
+## What each CVE lets an attacker do
+
+Plain-English impact of each vulnerability wired up in this lab.
+
+### CVE-2026-93546 — `mod_dav_fs` integer overflow (CVSS 8.8)
+
+**What it is:** A size-counter bug in Apache's WebDAV code. When it parses the XML body
+of a `PROPPATCH` / `PROPFIND` request, a length field wraps past `INT_MAX` and the server
+writes out of bounds.
+
+**What you can do with it:**
+- **Crash the Apache worker on demand** — one crafted `PROPPATCH` kills the child process
+  with SIGSEGV. Repeat it and `/dav/` is effectively down (DoS).
+- **Potentially execute code** — CWE-190 integer overflows that corrupt heap state are a
+  classic path to RCE. The CVSS 8.8 vector (I:H, A:H) says the server considers
+  code-execution plausible, not just a crash.
+- **Pivot into the box** — if RCE lands, you're running as the Apache user inside the
+  container, with reach into the backend and the Docker network.
+
+**Catch:** you need a valid DAV account first — hence the pairing with CVE-2026-73636.
+
+**Think of it as:** *"Any authenticated DAV user can crash or compromise the web server."*
+
+### CVE-2026-73636 — `mod_auth_digest` nonce replay (CVSS 8.1)
+
+**What it is:** With `AuthDigestNonceLifetime 0`, the server-issued nonce never expires.
+HTTP Digest auth is designed so the hashed credential in the `Authorization:` header stops
+working after a few minutes — here it works forever.
+
+**What you can do with it:**
+- **Steal a session without ever cracking the password** — one Wireshark capture of a
+  legitimate `GET /dav/` from a real user hands you a reusable `Authorization: Digest ...`
+  header.
+- **Impersonate that user indefinitely** — replay the header a day or a week later, same
+  result; the server treats you as `labuser`.
+- **Read everything that user can read** — browse the entire WebDAV share, download Q3
+  financials, client briefs, meeting notes, etc.
+- **Write things that user can write** (with a bit more work — capture a `PUT`/`DELETE`
+  instead of a `GET`, since the digest `response` hash includes the HTTP method).
+- **Chain into CVE-2026-93546** — now you have the authenticated session the DAV
+  overflow needs.
+
+**Catch:** needs network position to sniff traffic (any plain-HTTP LAN, open Wi-Fi,
+mirrored switch port, compromised router).
+
+**Think of it as:** *"Anyone who sniffs a single legitimate request becomes that user,
+forever."*
+
+### CVE-2026-63686 — `mod_xml2enc` NULL pointer dereference (CVSS 7.5)
+
+**What it is:** The charset-conversion filter Apache applies to proxied HTML responses
+dereferences a NULL pointer when the body's declared charset and actual byte encoding
+disagree (or when the body ends mid-multibyte sequence).
+
+**What you can do with it:**
+- **Crash the Apache worker remotely with no authentication** — just send
+  `GET /proxy/?charset=utf-16&encode_as=utf-8&truncate=7`. Segfault.
+- **Take `/proxy/` offline for everyone** — loop that request and the reverse-proxied path
+  stays unavailable for the duration of the attack; httpd keeps respawning children into
+  the same crash.
+- **No login required, no network foothold required** — anyone who can reach the HTTP port
+  can do it. This is the "scariest" of the three in exposure terms even though its CVSS
+  is the lowest, because the attacker bar is literally zero.
+
+**Catch:** availability-only (CVSS A:H, C:N, I:N) — no data theft, no code execution.
+Pure denial of service.
+
+**Think of it as:** *"Any random person on the internet can keep your proxied path down."*
+
+### How the three fit together
+
+| CVE | Attacker needs | Attacker gets | Attacker trajectory |
+|---|---|---|---|
+| **73636** (digest replay) | sniff one request | a free `labuser` session | **Foothold** — "I am now a logged-in user" |
+| **93546** (DAV overflow) | an authenticated DAV user | server crash, maybe RCE | **Escalation** — "I can break or own the server" |
+| **63686** (xml2enc deref) | nothing | `/proxy/` unavailable | **Independent DoS** — "I can keep your site down" |
+
+So the lab tells two attack stories: an **unauthenticated DoS** of `/proxy/` is one path;
+the **digest-replay + DAV-overflow combo** is a second path that goes from
+no-credentials-at-all to data theft and possible server compromise. Both come from the
+same unpatched Apache 2.4.68 build — upgrading to 2.4.69 closes all three.
+
+Full walkthroughs for each CVE live in [`guides/`](guides/).
+
 ## Quick start
 
 1. Make sure Docker Desktop is running.
