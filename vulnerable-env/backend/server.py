@@ -39,28 +39,68 @@ DEFAULT_BODY = """<!DOCTYPE html>
 <meta charset="utf-8">
 <title>Fieldstone News Mirror</title>
 <style>
- body { font-family: Georgia, "Times New Roman", serif; max-width: 760px;
-        margin: 36px auto; padding: 0 18px; color: #1b1f24; line-height: 1.55; }
- header { border-bottom: 2px solid #0f1a2b; padding-bottom: 10px; margin-bottom: 24px; }
- header h1 { margin: 0; font-size: 1.6em; letter-spacing: 0.3px; }
- header .sub { color: #5a6372; font-size: 0.9em; margin-top: 4px; }
- article { padding: 18px 0; border-bottom: 1px solid #e2e5ea; }
- article:last-child { border-bottom: none; }
- article h2 { margin: 0 0 4px; font-size: 1.18em; }
- article .byline { color: #5a6372; font-size: 0.85em; margin-bottom: 8px; }
- article p { margin: 0 0 8px; }
- .tag { display: inline-block; background: #eef1f5; color: #22508f;
-        font-size: 0.75em; padding: 1px 7px; border-radius: 10px;
-        font-family: sans-serif; }
- footer { color: #5a6372; font-size: 0.85em; margin-top: 24px;
-          border-top: 1px solid #e2e5ea; padding-top: 10px; }
+ :root{
+   --paper:#f1f0ea; --panel:#faf9f5; --ink:#22261f; --body:#3c4138;
+   --muted:#646a5d; --line:#d9d7cc; --hair:#e6e4da;
+   --pine:#245a46; --pine-deep:#17402f; --pine-tint:#e3ebe4;
+   --ochre:#b5801f; --code-bg:#e9e8df;
+   --font-display:"Bahnschrift","DIN Condensed","Oswald","Segoe UI Semibold",system-ui,sans-serif;
+   --font-body:"Segoe UI",system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;
+   --font-mono:"Cascadia Mono","Consolas",ui-monospace,Menlo,monospace;
+ }
+ *{box-sizing:border-box;}
+ body{margin:0;background:var(--paper);color:var(--ink);line-height:1.55;font-size:16px;
+   font-family:var(--font-body);
+   background-image:repeating-linear-gradient(90deg,rgba(34,38,31,.015) 0 1px,transparent 1px 3px);}
+ a{color:var(--pine);text-decoration:none;} a:hover{text-decoration:underline;text-underline-offset:2px;}
+ code{background:var(--code-bg);padding:1px 6px;border-radius:3px;font-family:var(--font-mono);font-size:.9em;color:var(--body);}
+ .topbar{background:var(--pine-deep);color:#e7ece3;border-bottom:3px solid var(--ochre);
+   display:flex;align-items:center;gap:18px;height:58px;padding:0 28px;}
+ .brand{display:flex;align-items:baseline;gap:10px;}
+ .logo{color:var(--ochre);font-size:1.15em;transform:translateY(1px);}
+ .brand-name{font-family:var(--font-display);font-weight:600;font-size:1.18em;letter-spacing:.4px;color:#fbfaf5;}
+ .brand-sub{color:#9fb3a4;font-size:.72em;font-family:var(--font-mono);letter-spacing:.04em;border-left:1px solid #3a5a4b;padding-left:10px;}
+ .topnav{margin-left:auto;display:flex;align-items:center;gap:4px;}
+ .topnav a{color:#c4d2c8;font-size:.92em;padding:6px 12px;border-radius:3px;}
+ .topnav a:hover{color:#fff;background:rgba(255,255,255,.07);text-decoration:none;}
+ .topnav a.active{color:#fff;background:rgba(181,128,31,.18);box-shadow:0 0 0 1px rgba(181,128,31,.55),0 0 12px 1px rgba(181,128,31,.5);}
+ .nav-cta{margin-left:10px;padding:6px 15px;border:1px solid rgba(255,255,255,.28);border-radius:4px;color:#fff;}
+ .nav-cta:hover{background:var(--ochre);border-color:var(--ochre);color:var(--pine-deep);text-decoration:none;}
+ .wrap{max-width:780px;margin:38px auto 60px;padding:0 24px;line-height:1.6;}
+ .eyebrow{font-family:var(--font-mono);font-size:.72rem;letter-spacing:.08em;color:var(--pine);display:inline-flex;align-items:center;gap:8px;}
+ .eyebrow::before{content:"";width:22px;height:2px;background:var(--ochre);}
+ .page-title{font-family:var(--font-display);font-weight:600;font-size:2.1rem;letter-spacing:.2px;color:var(--ink);margin:10px 0 4px;}
+ .page-sub{color:var(--muted);font-size:.86rem;font-family:var(--font-mono);margin:0 0 4px;padding-bottom:20px;border-bottom:1px solid var(--line);}
+ article{padding:22px 0;border-bottom:1px solid var(--hair);}
+ article:last-of-type{border-bottom:none;}
+ article h2{font-family:var(--font-display);margin:0 0 6px;font-size:1.3rem;color:var(--ink);letter-spacing:.2px;}
+ article .byline{color:var(--muted);font-size:.84em;margin-bottom:10px;font-family:var(--font-mono);}
+ article p{margin:0 0 10px;color:var(--body);}
+ .tag{display:inline-block;background:var(--pine-tint);color:var(--pine-deep);font-size:.72em;
+      padding:1px 8px;border-radius:3px;font-family:var(--font-mono);letter-spacing:.02em;}
+ footer{color:var(--muted);font-size:.83em;margin-top:28px;padding-top:14px;
+         border-top:1px solid var(--line);font-family:var(--font-mono);}
 </style>
 </head>
 <body>
-<header>
-  <h1>Fieldstone News Mirror</h1>
-  <div class="sub">Public feed, resynced hourly &middot; last sync 2026-10-22 14:48 SGT</div>
+<header class="topbar">
+  <div class="brand">
+    <span class="logo">&#9670;</span>
+    <span class="brand-name">Fieldstone Docs</span>
+    <span class="brand-sub">internal portal</span>
+  </div>
+  <nav class="topnav">
+    <a href="/">Home</a>
+    <a class="active" href="/proxy/">News Mirror</a>
+    <a href="/about.html">About</a>
+    <a href="/login.html">Shared Drive</a>
+    <a class="nav-cta" href="/login.html">Sign in</a>
+  </nav>
 </header>
+<main class="wrap">
+  <span class="eyebrow">Mirrored feed &middot; read-only</span>
+  <h1 class="page-title">News Mirror</h1>
+  <p class="page-sub">Public feed, resynced hourly &middot; last sync 2026-10-22 14:48 SGT</p>
 
 <article>
   <h2>Port of Singapore clears record container volume for third quarter</h2>
@@ -113,10 +153,12 @@ DEFAULT_BODY = """<!DOCTYPE html>
   </p>
 </article>
 
-<footer>
-  Fieldstone News Mirror &middot; resynced from upstream once per hour.
-  Not an original news source; links point to the publishers' own sites.
-</footer>
+  <footer>
+    Fieldstone News Mirror &middot; resynced from upstream once per hour.
+    Not an original news source; links point to the publishers' own sites.
+  </footer>
+</main>
+<script src="/assets/nav.js?v=2"></script>
 </body>
 </html>
 """

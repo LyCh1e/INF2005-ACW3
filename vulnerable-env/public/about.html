@@ -2,9 +2,9 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>About — Fieldstone Docs</title>
+  <title>About - Fieldstone Docs</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="assets/style.css">
+  <link rel="stylesheet" href="assets/style.css?v=5">
 </head>
 <body>
   <header class="topbar">
@@ -15,52 +15,53 @@
     </div>
     <nav class="topnav">
       <a href="/">Home</a>
-      <a href="login.html">Shared Drive</a>
       <a href="/proxy/">News Mirror</a>
-      <a href="about.html">About</a>
+      <a class="active" href="about.html">About</a>
+      <a href="login.html">Shared Drive</a>
+      <a class="nav-cta" href="login.html">Sign in</a>
     </nav>
   </header>
 
   <main class="wrap">
     <section class="page">
-      <h1>About this portal</h1>
+      <span class="eyebrow">About the portal</span>
+      <h1>About Fieldstone Docs</h1>
       <p>
-        Fieldstone Docs is the small internal portal our team uses to share
-        files and read a mirrored copy of a public news feed. It runs on an
-        Apache httpd 2.4.68 box in the lab and is only reachable from inside
-        the lab network.
+        Fieldstone Docs is the team's internal portal for keeping working
+        documents in one place, sharing them over a secured drive, and
+        reading a mirrored copy of a public news feed. It runs on the team's
+        own server and is reachable only from inside the network.
       </p>
 
       <h2>What's here</h2>
       <ul>
         <li>
-          <strong>Shared drive</strong> at <code>/dav/</code> — a WebDAV share
-          where team members can read, upload, edit, and delete files. It
-          requires HTTP Digest authentication (realm <code>acw3-dav</code>).
+          <strong>Shared drive</strong>: a workspace at <code>/dav/</code>
+          where the team reads, uploads, edits, and removes documents. It is
+          protected by a per-user sign-in (HTTP Digest, realm
+          <code>acw3-dav</code>).
         </li>
         <li>
-          <strong>News mirror</strong> at <code>/proxy/</code> — a reverse
-          proxy to a small backend service. The backend accepts a few query
-          parameters so we can shape the response (declared vs. actual
-          charset, truncation, transfer-encoding) while we debug a rendering
-          issue with the <code>proxy-html</code> output filter.
+          <strong>News mirror</strong>: a read-only copy of a public news
+          feed at <code>/proxy/</code>, refreshed on a schedule so the team
+          can scan headlines without leaving the portal.
         </li>
       </ul>
 
-      <h2>Credentials</h2>
+      <h2>Access</h2>
       <p>
-        The default lab user is <code>labuser</code> in the realm
-        <code>acw3-dav</code>. The password is set per the quick-start steps in
-        <code>vulnerable-env/README.md</code> and is not published on this
-        page.
+        The shared drive asks you to sign in before it opens. The default
+        account for this environment is <code>labuser</code> in the
+        <code>acw3-dav</code> realm; the password is handed out with the
+        environment setup rather than published here.
       </p>
 
-      <h2>Contact</h2>
+      <h2>Who runs it</h2>
       <p>
-        This is the ACW3 target site maintained by Group P1-6 of INF2005
-        (Cyber Security Fundamentals). For questions about the lab setup, ask
-        on the team channel; for anything about the course, see the module
-        page on xSite.
+        This site is built and maintained by Group P1-6 for INF2005
+        (Cyber Security Fundamentals). It is a lab environment: all content
+        is sample data, and it should only ever run on an isolated VM or lab
+        network, never exposed to the public internet.
       </p>
     </section>
   </main>
@@ -69,5 +70,6 @@
     <span>Fieldstone Docs · P1-6 lab build · 2026</span>
     <span><a href="cve-map.html">Team CVE map</a></span>
   </footer>
+  <script src="/assets/nav.js?v=2"></script>
 </body>
 </html>

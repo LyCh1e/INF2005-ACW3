@@ -2,9 +2,19 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Sign in — Fieldstone Docs</title>
+  <title>Sign in - Fieldstone Docs</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="assets/style.css">
+  <link rel="stylesheet" href="assets/style.css?v=4">
+  <script>
+    // If already signed in this browser session, skip the form and go
+    // straight to the shared drive. The browser still has the digest
+    // credentials cached, so /dav/ opens without prompting again.
+    try {
+      if (sessionStorage.getItem('fieldstone.loggedIn') === '1') {
+        window.location.replace('/dav/');
+      }
+    } catch (_) {}
+  </script>
 </head>
 <body class="login-body">
   <main class="login-wrap">
@@ -13,6 +23,7 @@
         <span class="logo">◆</span>
         <span class="brand-name">Fieldstone Docs</span>
       </div>
+      <span class="eyebrow" style="margin-bottom:8px">Secured access</span>
       <h1>Sign in to the shared drive</h1>
       <p class="login-sub">
         Use your Fieldstone portal account. Access is logged.
@@ -43,7 +54,7 @@
       </div>
 
       <p class="login-foot">
-        Having trouble? Contact IT (Arjun K.) &middot;
+        Having trouble? Contact IT &middot;
         <a href="/">Back to portal</a>
       </p>
     </div>
@@ -72,7 +83,10 @@
       xhr.onload = () => {
         if (xhr.status === 200) {
           // Mark that the user went through our login page (for UX only).
-          try { sessionStorage.setItem('fieldstone.loggedIn', '1'); } catch (_) {}
+          try {
+            sessionStorage.setItem('fieldstone.loggedIn', '1');
+            sessionStorage.setItem('fieldstone.user', user);
+          } catch (_) {}
           window.location.href = '/dav/';
         } else {
           showError();

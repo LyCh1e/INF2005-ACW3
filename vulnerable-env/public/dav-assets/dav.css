@@ -1,0 +1,69 @@
+/* Stylesheet for the WebDAV "shared drive" directory listing (/dav/).
+   Served from /dav-assets/ (outside /dav/, so no auth). Cosmetic only -
+   matches the Fieldstone site identity applied to Apache's fancy index. */
+
+:root{
+  --paper:#f1f0ea; --panel:#faf9f5; --paper-2:#e9e8e0;
+  --ink:#22261f; --body:#3c4138; --muted:#646a5d; --faint:#8a8f80;
+  --line:#d9d7cc; --hair:#e6e4da;
+  --pine:#245a46; --pine-deep:#17402f; --pine-tint:#e3ebe4;
+  --ochre:#b5801f; --code-bg:#e9e8df;
+  --font-display:"Bahnschrift","DIN Condensed","Oswald","Segoe UI Semibold",system-ui,sans-serif;
+  --font-body:"Segoe UI",system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;
+  --font-mono:"Cascadia Mono","Consolas",ui-monospace,Menlo,monospace;
+}
+*{box-sizing:border-box;}
+body.dav-body{
+  margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-body);
+  line-height:1.55;font-size:16px;
+  background-image:repeating-linear-gradient(90deg,rgba(34,38,31,.015) 0 1px,transparent 1px 3px);
+}
+a{color:var(--pine);text-decoration:none;}
+a:hover{text-decoration:underline;text-underline-offset:2px;}
+
+/* --- top bar (identical to the rest of the site) --- */
+.topbar{background:var(--pine-deep);color:#e7ece3;border-bottom:3px solid var(--ochre);
+  display:flex;align-items:center;gap:18px;height:58px;padding:0 28px;}
+.brand{display:flex;align-items:baseline;gap:10px;}
+.logo{color:var(--ochre);font-size:1.15em;transform:translateY(1px);}
+.brand-name{font-family:var(--font-display);font-weight:600;font-size:1.18em;letter-spacing:.4px;color:#fbfaf5;}
+.brand-sub{color:#9fb3a4;font-size:.72em;font-family:var(--font-mono);letter-spacing:.04em;border-left:1px solid #3a5a4b;padding-left:10px;}
+.topnav{margin-left:auto;display:flex;align-items:center;gap:4px;}
+.topnav a{color:#c4d2c8;font-size:.92em;padding:6px 12px;border-radius:3px;}
+.topnav a:hover{color:#fff;background:rgba(255,255,255,.07);text-decoration:none;}
+.topnav a.active{color:#fff;background:rgba(181,128,31,.18);box-shadow:0 0 0 1px rgba(181,128,31,.55),0 0 12px 1px rgba(181,128,31,.5);}
+.nav-cta{margin-left:10px;padding:6px 15px;border:1px solid rgba(255,255,255,.28);border-radius:4px;color:#fff;}
+.nav-cta:hover{background:var(--ochre);border-color:var(--ochre);color:var(--pine-deep);text-decoration:none;}
+
+/* --- page heading --- */
+.dav-head{max-width:860px;margin:38px auto 16px;padding:0 24px;}
+.eyebrow{font-family:var(--font-mono);font-size:.72rem;letter-spacing:.08em;color:var(--pine);display:inline-flex;align-items:center;gap:8px;}
+.eyebrow::before{content:"";width:22px;height:2px;background:var(--ochre);}
+.dav-head h1{font-family:var(--font-display);font-weight:600;font-size:2.1rem;letter-spacing:.2px;color:var(--ink);margin:10px 0 4px;}
+.dav-sub{color:var(--muted);font-size:.86rem;font-family:var(--font-mono);margin:0;}
+
+/* --- file table (Apache fancy-index classic table) --- */
+body.dav-body table{
+  max-width:860px;width:calc(100% - 48px);margin:4px auto 30px;
+  border-collapse:collapse;background:var(--panel);
+  border:1px solid var(--line);border-radius:4px;overflow:hidden;font-size:.95em;
+}
+body.dav-body table th{
+  background:var(--paper-2);text-align:left;font-family:var(--font-display);
+  font-weight:600;letter-spacing:.3px;color:var(--ink);
+  padding:11px 16px;border-bottom:1px solid var(--line);
+}
+body.dav-body table tr th:nth-child(2),
+body.dav-body table tr th:nth-child(3){text-align:right;}
+/* hide the <hr> separator rows Apache inserts */
+body.dav-body table th[colspan]{padding:0;height:0;border:none;background:transparent;}
+body.dav-body table th[colspan] hr{display:none;}
+body.dav-body table td{padding:10px 16px;border-bottom:1px solid var(--hair);vertical-align:middle;}
+body.dav-body table tr:hover td{background:var(--pine-tint);}
+body.dav-body table td a{color:var(--ink);}
+body.dav-body table td a:hover{color:var(--pine);}
+body.dav-body table td[align="right"]{color:var(--muted);font-family:var(--font-mono);font-size:.84em;text-align:right;white-space:nowrap;}
+
+/* --- footer --- */
+.dav-footer{max-width:860px;margin:0 auto 40px;padding:14px 24px 0;
+  border-top:1px solid var(--line);color:var(--muted);font-size:.83em;font-family:var(--font-mono);}
