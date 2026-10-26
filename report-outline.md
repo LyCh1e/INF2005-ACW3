@@ -30,19 +30,19 @@ Keep diagrams, screenshots, config listings and PoC steps in the **Appendix** (n
 ## Page 1 — Team page
 - Module, coursework number, lab group / team (P1-6), submission date.
 - Table: **Full name · Student ID · Role** (one row per member).
-- Declaration line: "Each member can explain at least one documented vulnerability end to end."
+- **Declaration of originality, signed by all team members** (required by the spec).
 
 ## Page 2 — Summary table (required)
-One row per documented flaw:
+Columns exactly as the spec's template. "Severity Scale" is the CVSS base score (the spec's example uses the number, e.g. 6, 5).
 
-| CVE ID | Component | Vector string | Base score | Severity | Root-cause (1 line) | Primary mitigation (1 line) |
-|---|---|---|---|---|---|---|
-| CVE-2026-93546 | mod_dav_fs | *(from record)* | 8.8 | High | | |
-| CVE-2026-73636 | mod_auth_digest | *(from record)* | 8.1 | High | | |
-| CVE-2026-63686 | mod_xml2enc | *(from record)* | 7.5 | High | | |
-| **Total** | | | **24.4** | High | | |
+| # | Severity Scale | Vulnerability | Used Exploit | Recommended Remediation |
+|---|---|---|---|---|
+| 1 | 8.8 (High) | CVE-2026-93546 — mod_dav_fs | *(technique/tool used)* | *(defence)* |
+| 2 | 8.1 (High) | CVE-2026-73636 — mod_auth_digest | *(technique/tool used)* | *(defence)* |
+| 3 | 7.5 (High) | CVE-2026-63686 — mod_xml2enc | *(technique/tool used)* | *(defence)* |
+|   | **Total 24.4** (≥ 20) | | | |
 
-Add a footnote: fixed in Apache httpd 2.4.69; target runs 2.4.68.
+Footnote: all three fixed in Apache httpd 2.4.69; target runs 2.4.68. (The full CVSS vector strings go in the appendix / §2, not this table.)
 
 ## §1 — Introduction, scope & environment (p.3)
 - Objective and what "done" means for the module.
