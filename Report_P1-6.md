@@ -20,9 +20,23 @@
 
 **Module:** INF2005 Cyber Security Fundamentals · **Coursework:** ACW3 — Vulnerabilities Assessments and Remediation · **Lab group / team:** P1-6 · **Submission date:** 9 November 2026.
 
-**Declaration of originality.** We declare that this report is our own work and that all team members contributed to the pen-testing and its documentation. Generative-AI assistance is disclosed in §6. *(Signed by all team members — see signature block below / attached declaration form.)*
+### Declaration of originality and AI usage
 
-[PLACEHOLDER: signatures of all team members]
+We declare that this report is our own work, that all team members contributed to the pen-testing and its documentation, and that it has not been submitted for any other assessment.
+
+**GenAI-use disclosure (per SIT policy on GenAI use in assessments).** A generative-AI coding assistant (Anthropic Claude, via Claude Code) was used to: **verify** the CVE-2026-93546 exploit against the local lab and identify why the original payload did not work; **author** the reproducibility PoC script (`poc_dav_overflow.py`) and the `mem_limit` safe-demo hardening; **cross-check** the official CVE records; and **draft and structure** this report from the team's outline and verified findings. All exploitation was run by the team against the team's own isolated lab; all results reported as "verified" were observed by the team, and all outstanding items are disclosed as such. The team reviewed, edited, and is responsible for the final content.
+[PLACEHOLDER: adjust the GenAI wording above to match exactly what each member used, per module policy.]
+
+By signing below, all team members confirm the declaration and the GenAI disclosure above.
+
+| Full name | Student ID | Signature | Date |
+|---|---|---|---|
+| [PLACEHOLDER: name] | [PLACEHOLDER: ID] | | |
+| [PLACEHOLDER: name] | [PLACEHOLDER: ID] | | |
+| [PLACEHOLDER: name] | [PLACEHOLDER: ID] | | |
+| [PLACEHOLDER: name] | [PLACEHOLDER: ID] | | |
+| [PLACEHOLDER: name] | [PLACEHOLDER: ID] | | |
+| [PLACEHOLDER: name] | [PLACEHOLDER: ID] | | |
 
 ---
 
@@ -137,10 +151,7 @@ The three flaws share one root remediation and several defence-in-depth themes:
 
 Team P1-6 assessed three High-severity vulnerabilities in an unpatched Apache 2.4.68 build, accumulating a CVSS total of **24.4 (≥ 20)** at a highest tier of **High**. CVE-2026-93546 is fully reproduced, including the correction of a non-working exploit and a safe, repeatable proof-of-concept; CVE-2026-73636 and CVE-2026-63686 have **confirmed preconditions** with specific, named exploitation steps remaining (§3.2, §3.3) to be closed before the live demonstration. A production team should prioritise the single remediation that closes all three — upgrading to 2.4.69 — followed by module minimisation, resource bounding, and TLS. Residual risk after patching is low, dominated by configuration drift (e.g. re-enabling Digest without TLS), which monitoring and config management address.
 
-## 6. GenAI-use declaration
-
-In line with SIT policy on GenAI use in assessments, the team discloses the following. A generative-AI coding assistant (Anthropic Claude, via Claude Code) was used to: **verify** the CVE-2026-93546 exploit against the local lab and identify why the original payload did not work; **author** the reproducibility PoC script (`poc_dav_overflow.py`) and the `mem_limit` safe-demo hardening; **cross-check** the official CVE records; and **draft and structure** this report from the team's outline and verified findings. All exploitation was run by the team against the team's own isolated lab; all results reported as "verified" were observed by the team, and all outstanding items are disclosed as such. The team reviewed, edited, and is responsible for the final content.
-[PLACEHOLDER: adjust the wording above to match exactly what each member used, per module policy.]
+*(The GenAI-use declaration required by the brief is stated on the team page, combined with the Declaration of originality.)*
 
 ---
 
