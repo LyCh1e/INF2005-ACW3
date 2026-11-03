@@ -26,8 +26,8 @@ Query parameters on GET /:
                       (default: text/html, so the proxy-html filter applies).
 
 Examples once the stack is up:
-  curl "http://localhost:8080/proxy/?charset=utf-16&encode_as=utf-8"
-  curl "http://localhost:8080/proxy/?charset=utf-8&truncate=5"
+  curl "http://localhost:8080/proxy/?charset=big5&encode_as=cp500&truncate=13"
+  curl "http://localhost:8080/proxy/?charset=big5&encode_as=cp500&truncate=11"
 """
 
 from http.server import BaseHTTPRequestHandler, HTTPServer
