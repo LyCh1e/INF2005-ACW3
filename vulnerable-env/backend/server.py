@@ -24,10 +24,14 @@ Query parameters on GET /:
                       of Content-Length.
   content_type=<ct>   Override the MIME type portion of Content-Type
                       (default: text/html, so the proxy-html filter applies).
+  body=<text>         Use this text as the response body instead of the
+                      default page. Encoded via encode_as before sending.
+  raw_hex=<hex>       Send these raw hex bytes as the body, bypassing any
+                      text encoding. Useful for precise byte-level control.
 
 Examples once the stack is up:
-  curl "http://localhost:8080/proxy/?charset=big5&encode_as=cp500&truncate=13"
-  curl "http://localhost:8080/proxy/?charset=big5&encode_as=cp500&truncate=11"
+  curl "http://localhost:8080/proxy/?charset=big5&encode_as=cp500&body=AAAAAAA"
+  curl "http://localhost:8080/proxy/?charset=big5&raw_hex=c1c1c1c1c1c1c1"
 """
 
 from http.server import BaseHTTPRequestHandler, HTTPServer
@@ -173,14 +177,26 @@ class Handler(BaseHTTPRequestHandler):
         content_type = params.get("content_type", ["text/html"])[0]
         truncate = params.get("truncate", [None])[0]
         chunked = params.get("chunked", ["0"])[0] == "1"
+        custom_body = params.get("body", [None])[0]
+        raw_hex = params.get("raw_hex", [None])[0]
 
-        try:
-            body = DEFAULT_BODY.encode(actual_charset, errors="replace")
-        except LookupError:
-            # Unknown codec name - fall back but keep it visible in the response.
-            body = f"<!-- unknown encode_as charset: {actual_charset} -->\n".encode(
-                "utf-8"
-            ) + DEFAULT_BODY.encode("utf-8", errors="replace")
+        if raw_hex is not None:
+            try:
+                body = bytes.fromhex(raw_hex)
+            except ValueError:
+                body = b"<!-- bad raw_hex value -->\n"
+        elif custom_body is not None:
+            try:
+                body = custom_body.encode(actual_charset, errors="replace")
+            except LookupError:
+                body = custom_body.encode("utf-8", errors="replace")
+        else:
+            try:
+                body = DEFAULT_BODY.encode(actual_charset, errors="replace")
+            except LookupError:
+                body = f"<!-- unknown encode_as charset: {actual_charset} -->\n".encode(
+                    "utf-8"
+                ) + DEFAULT_BODY.encode("utf-8", errors="replace")
 
         if truncate is not None:
             try:
