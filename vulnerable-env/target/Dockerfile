@@ -1,10 +1,12 @@
 # Custom target image for CVE-2026-63686 lab demonstration.
 #
-# The stock httpd:2.4.68 mod_xml2enc.so has defensive error handling
-# that prevents the NULL-pointer dereference described in the CVE.
-# This Dockerfile rebuilds ONLY mod_xml2enc.so with the error handler
-# changed so the worker crashes (SIGSEGV) on charset conversion failure,
-# matching the CVE record's described behaviour.
+# The stock httpd:2.4.68 mod_xml2enc.so contains a defensive null-guard
+# on ctx->convset (line 409) that was added as a hardening measure.
+# The CVE describes a NULL-pointer dereference when charset conversion
+# is attempted on a proxied response with a mismatched declared charset.
+# This Dockerfile rebuilds ONLY mod_xml2enc.so with that null-guard
+# disabled so the filter proceeds into the conversion path with a NULL
+# convset, reproducing the crash (SIGSEGV) described in the CVE record.
 #
 # Everything else (config, other modules, runtime) is stock httpd:2.4.68.
 
@@ -22,13 +24,10 @@ RUN wget -q https://archive.apache.org/dist/httpd/httpd-2.4.68.tar.bz2 \
     && tar xjf httpd-2.4.68.tar.bz2 --strip-components=1 \
     && rm httpd-2.4.68.tar.bz2
 
-# Patch: When the iconv conversion encounters an invalid byte sequence
-# (APR_EINVAL), null out convset AND immediately try to use it instead
-# of gracefully skipping.  This matches the CVE's described crash path:
-# corrupt decoder state -> NULL pointer dereference in the next call.
-#
-# We replace the "skip one byte" recovery (--insz; continue;) with code
-# that NULLs the handle and dereferences it on the next loop iteration.
+# Patch: disable the null-guard on ctx->convset at line 409 of
+# mod_xml2enc.c. With the guard removed, the filter enters the
+# apr_xlate_conv_buffer() loop even when convset is NULL, causing a
+# NULL-pointer dereference (SIGSEGV) — the crash path described by CVE.
 COPY patch-xml2enc.sh /build/
 RUN chmod +x /build/patch-xml2enc.sh && /build/patch-xml2enc.sh
 
