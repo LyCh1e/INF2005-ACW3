@@ -12,6 +12,15 @@ services:
     container_name: acw3-target
     ports:
       - "8080:80"
+    # Memory cap so the CVE-2026-93546 PROPPATCH namespace-overflow PoC kills the
+    # worker fast and SAFELY: a crafted request amplifies ~1 MB of XML into
+    # multiple GB in the worker. Without a cap it can exhaust the host's RAM
+    # (observed >10 GB) before anything crashes. Capping the container at 512 MB
+    # (no swap) makes the worker hit the limit and die within seconds, the DoS is
+    # clearly demonstrable, and your laptop stays safe. This models a real server
+    # with finite RAM; it does not change whether the bug is present.
+    mem_limit: 512m
+    memswap_limit: 512m
     volumes:
       - ./conf/httpd-vuln.conf:/usr/local/apache2/conf/extra/httpd-vuln.conf:ro
       - ./conf/digest.passwd:/usr/local/apache2/conf/digest.passwd:ro
