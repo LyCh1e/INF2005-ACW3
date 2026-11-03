@@ -46,8 +46,8 @@ By signing below, all team members confirm the declaration and the GenAI disclos
 |---|---|---|---|---|
 | 1 | 8.8 (High) | CVE-2026-93546 — Apache `mod_dav_fs` integer overflow (CWE-190) — **✅ verified** | Crafted `PROPPATCH` declaring ~45,000 distinct XML namespaces, delivered by `poc_dav_overflow.py`, overflowing the namespace counter and crashing the worker (DoS). | Upgrade to httpd 2.4.69; tighten `LimitXMLRequestBody` (100 KB) and bound worker memory (`RLimitMEM` / container `mem_limit`). |
 | 2 | 8.1 (High) | CVE-2026-73636 — Apache `mod_auth_digest` capture-replay (CWE-294) — *in progress (§3.2)* | *Exploitation to be documented once reproduced — see §3.2.* | Upgrade to httpd 2.4.69; remove `AuthDigestNonceLifetime 0`; move to HTTP Basic/SSO over TLS so the header is never sniffable. |
-| 3 | 7.5 (High) | CVE-2026-63686 — Apache `mod_xml2enc` NULL-pointer dereference (CWE-476) — *in progress (§3.2)* | *Exploitation to be documented once reproduced — see §3.2.* | Upgrade to httpd 2.4.69; drop `mod_xml2enc` / `proxy-html` where charset normalisation is not required; validate upstream `Content-Type`. |
-| | **Target total: 24.4** (≥ 20 required) — **verified so far: 8.8** | Highest tier: **High → 100 % severity multiplier** | | |
+| 3 | 7.5 (High) | CVE-2026-63686 — Apache `mod_xml2enc` NULL-pointer dereference (CWE-476) — **verified** | Crafted HTTP request to the reverse-proxied path (`/proxy/`) with `charset=utf-16` declared in the backend response while the body is actually UTF-8 encoded. The charset mismatch triggers a NULL-pointer dereference in `mod_xml2enc`'s conversion filter, crashing the httpd worker with SIGSEGV (signal 11). Repeated requests cause sustained DoS. | Upgrade to httpd 2.4.69; drop `mod_xml2enc` / `proxy-html` where charset normalisation is not required; validate upstream `Content-Type`. |
+| | **Target total: 24.4** (≥ 20 required) — **verified so far: 16.3** | Highest tier: **High → 100 % severity multiplier** | | |
 
 All three are fixed in Apache httpd 2.4.69; the target runs 2.4.68. Full CVSS vector strings are in Appendix C.
 

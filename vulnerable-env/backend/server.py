@@ -189,7 +189,14 @@ class Handler(BaseHTTPRequestHandler):
                 pass
 
         self.send_response(200)
-        self.send_header("Content-Type", f"{content_type}; charset={declared_charset}")
+        # Only declare charset when explicitly requested via query params.
+        # This lets the xml2enc filter skip conversion for normal requests
+        # (no charset= in Content-Type -> no iconv path -> no crash),
+        # while attack requests with ?charset=... trigger the filter.
+        if "charset" in params:
+            self.send_header("Content-Type", f"{content_type}; charset={declared_charset}")
+        else:
+            self.send_header("Content-Type", content_type)
 
         if chunked:
             self.send_header("Transfer-Encoding", "chunked")

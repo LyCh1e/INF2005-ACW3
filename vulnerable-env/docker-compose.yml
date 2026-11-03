@@ -8,7 +8,8 @@
 
 services:
   target:
-    image: httpd:2.4.68
+    build: ./target
+    image: acw3-target:2.4.68-vuln
     container_name: acw3-target
     ports:
       - "8080:80"
