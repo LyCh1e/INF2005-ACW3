@@ -188,10 +188,16 @@ docker inspect --format "OOMKilled={{.State.OOMKilled}}" acw3-target
 > "Docker confirms OOMKilled=true. The service recovers automatically, but
 > repeated attacks would cause sustained denial of service."
 
-**Remediation (30 sec):**
+**Mitigation & Remediation (30 sec):**
 
-> "Upgrade to Apache 2.4.69. Additionally, set LimitXMLRequestBody to cap
-> XML payload size, and use container memory limits to protect the host."
+> "The true fix is to upgrade to Apache 2.4.69, which removes the integer
+> overflow itself. While patching is scheduled, there are several mitigations:
+> set `LimitXMLRequestBody 102400` in the DAV directory block to cap XML
+> payload size — the default 1 MB is not low enough. Bound process memory
+> with a container `mem_limit` or systemd `MemoryMax` so one bad request
+> can't take the entire host down. Disable `Dav` on collections that don't
+> need writes, and front WebDAV with a WAF rule that rejects PROPPATCH
+> bodies containing an abnormal number of `xmlns` declarations."
 
 ---
 
@@ -238,10 +244,16 @@ curl -s -o /dev/null -w "%{http_code}" -H "Authorization: [header]" http://local
 
 > "HTTP 200. Full access to the shared drive without the password."
 
-**Remediation (30 sec):**
+**Mitigation & Remediation (30 sec):**
 
-> "Upgrade to Apache 2.4.69. Remove NonceLifetime 0 — use the default 300 seconds.
-> Better yet, switch to Basic auth over TLS so credentials can't be sniffed."
+> "The fix is to upgrade to Apache 2.4.69, which tightens how nonces are
+> issued and validated. For immediate mitigation: remove `AuthDigestNonceLifetime 0`
+> and use the default 300 seconds, or set it even shorter — say 60 seconds — for
+> high-value endpoints. Better yet, move away from Digest authentication entirely.
+> HTTP Basic over TLS, or OAuth and SSO in front of the DAV share, both avoid
+> the capture-replay class of bugs entirely. As defence in depth, require HTTPS
+> so the Authorization header cannot be sniffed over the wire, and log and alert
+> on the same nonce being reused from different source IPs."
 
 ---
 
@@ -287,10 +299,16 @@ docker compose logs target | grep -E "70008|Segmentation"
 > "Error 70008 — the mismatched constant — followed by Segmentation fault 11.
 > The NULL dereference is confirmed."
 
-**Remediation (30 sec):**
+**Mitigation & Remediation (30 sec):**
 
-> "Upgrade to 2.4.69. The fix corrects the constant and adds a return after
-> the default handler. As a workaround, disable mod_xml2enc where it's not needed."
+> "The fix is to upgrade to Apache 2.4.69, which corrects the error-code
+> constant and adds a proper return after the default handler. To reduce
+> exposure while patching: disable `mod_xml2enc` and `SetOutputFilter proxy-html`
+> on any proxy path where charset normalisation is not required. Restrict
+> proxy rules so Apache only talks to trusted backends. Rate-limit the
+> proxied path to reduce the denial-of-service window. As defence in depth,
+> monitor Apache child-process exit signals so a crash loop pages the
+> on-call team immediately."
 
 ---
 
