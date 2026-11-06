@@ -1,7 +1,7 @@
 # Vulnerabilities Assessments and Remediation
 ## INF2005 Cyber Security Fundamentals — Assessed Coursework 3 (ACW3)
 
-**Team:** P1-6 · **Target build:** Apache HTTP Server 2.4.68 (self-built local Docker lab) · **Date:** 9 November 2026
+**Team:** P6-6 · **Target build:** Apache HTTP Server 2.4.68 (self-built local Docker lab) · **Date:** 9 November 2026
 
 > *Formatting note for submission:* export this document to PDF in **11-pt Calibri**. The body (§1–§6) is sized to the **10-page limit**; the cover page, references, and appendix are excluded from that count per the brief. Replace every `[PLACEHOLDER: …]` marker before submission.
 
@@ -18,7 +18,7 @@
 | [PLACEHOLDER: name] | [PLACEHOLDER: ID] | Remediation & reporting |
 | [PLACEHOLDER: name] | [PLACEHOLDER: ID] | [role] |
 
-**Module:** INF2005 Cyber Security Fundamentals · **Coursework:** ACW3 — Vulnerabilities Assessments and Remediation · **Lab group / team:** P1-6 · **Submission date:** 9 November 2026.
+**Module:** INF2005 Cyber Security Fundamentals · **Coursework:** ACW3 — Vulnerabilities Assessments and Remediation · **Lab group / team:** P6-6 · **Submission date:** 9 November 2026.
 
 ### Declaration of originality and AI usage
 
@@ -55,7 +55,7 @@ All three are fixed in Apache httpd 2.4.69; the target runs 2.4.68. Full CVSS ve
 
 ## Executive summary
 
-This report documents a vulnerability assessment and remediation exercise carried out by Team P1-6 against a **self-built, isolated Apache HTTP Server 2.4.68 environment** running under Docker on a team member's laptop. Three vulnerabilities from the approved ACW3 CVE list were selected, all affecting the same unpatched Apache build and together accumulating a CVSS base-score total of **24.4** (above the required 20), with a highest severity tier of **High**.
+This report documents a vulnerability assessment and remediation exercise carried out by Team P6-6 against a **self-built, isolated Apache HTTP Server 2.4.68 environment** running under Docker on a team member's laptop. Three vulnerabilities from the approved ACW3 CVE list were selected, all affecting the same unpatched Apache build and together accumulating a CVSS base-score total of **24.4** (above the required 20), with a highest severity tier of **High**.
 
 The three flaws form two attack narratives against one server: an **authenticated denial-of-service / memory-corruption** path in the WebDAV file backend (`mod_dav_fs`, CVE-2026-93546), a **credential capture-replay** path in HTTP Digest authentication (`mod_auth_digest`, CVE-2026-73636), and an **unauthenticated denial-of-service** path in the reverse-proxy charset filter (`mod_xml2enc`, CVE-2026-63686). All three are closed by the single upstream remediation of upgrading to Apache 2.4.69.
 
@@ -149,7 +149,7 @@ The three flaws share one root remediation and several defence-in-depth themes:
 
 ## 5. Conclusion
 
-Team P1-6 assessed three High-severity vulnerabilities in an unpatched Apache 2.4.68 build, accumulating a CVSS total of **24.4 (≥ 20)** at a highest tier of **High**. CVE-2026-93546 is fully reproduced, including the correction of a non-working exploit and a safe, repeatable proof-of-concept; CVE-2026-73636 and CVE-2026-63686 have **confirmed preconditions** with specific, named exploitation steps remaining (§3.2, §3.3) to be closed before the live demonstration. A production team should prioritise the single remediation that closes all three — upgrading to 2.4.69 — followed by module minimisation, resource bounding, and TLS. Residual risk after patching is low, dominated by configuration drift (e.g. re-enabling Digest without TLS), which monitoring and config management address.
+Team P6-6 assessed three High-severity vulnerabilities in an unpatched Apache 2.4.68 build, accumulating a CVSS total of **24.4 (≥ 20)** at a highest tier of **High**. CVE-2026-93546 is fully reproduced, including the correction of a non-working exploit and a safe, repeatable proof-of-concept; CVE-2026-73636 and CVE-2026-63686 have **confirmed preconditions** with specific, named exploitation steps remaining (§3.2, §3.3) to be closed before the live demonstration. A production team should prioritise the single remediation that closes all three — upgrading to 2.4.69 — followed by module minimisation, resource bounding, and TLS. Residual risk after patching is low, dominated by configuration drift (e.g. re-enabling Digest without TLS), which monitoring and config management address.
 
 *(The GenAI-use declaration required by the brief is stated on the team page, combined with the Declaration of originality.)*
 

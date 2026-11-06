@@ -1,4 +1,4 @@
-# ACW3 CVE Suggestions (Group P1-6)
+# ACW3 CVE Suggestions (Group P6-6)
 
 ## Key Requirements (from spec)
 

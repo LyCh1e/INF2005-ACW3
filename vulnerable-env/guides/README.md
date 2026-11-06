@@ -1,4 +1,4 @@
-# ACW3 pentest guides — Group P1-6
+# ACW3 pentest guides — Group P6-6
 
 One guide per CVE wired up in `vulnerable-env/`. Each guide is written
 as a standalone demo + report walkthrough: setup, identification,

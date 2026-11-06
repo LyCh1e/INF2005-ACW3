@@ -1,4 +1,4 @@
-# Vulnerable lab environment for ACW3 (Group P1-6).
+# Vulnerable lab environment for ACW3 (Group P6-6).
 # Targets three CVEs against Apache HTTP Server 2.4.68 (fixed in 2.4.69):
 #   - CVE-2026-93546 mod_dav_fs   (WebDAV PROPPATCH namespace overflow)
 #   - CVE-2026-73636 mod_auth_digest (digest nonce replay, needs AuthDigestNonceLifetime 0)

@@ -1,4 +1,4 @@
-# INF2005 ACW3 — Team Tasks & Delegation (Team P1-6)
+# INF2005 ACW3 — Team Tasks & Delegation (Team P6-6)
 
 **Status:** lab environment + pen-test guides + report outline are done. We are now in the **run exploits → capture evidence → write report → rehearse** phase.
 
@@ -23,7 +23,7 @@ Each owner: reproduces the exploit, captures evidence, verifies the CVSS score, 
 | Member | Role | Owns |
 |---|---|---|
 | **Cyube** | Lab & reproducibility lead | Build Kali attacker box, take the **clean snapshots** everyone works from, help the CVE owners get their exploits reproducing, deep technical Q&A backup on the day. |
-| **Nicholas** | Report owner | Assemble the 3 CVE sections + intro/methodology/conclusion, formatting (11-pt Calibri, ≤10 pages), Page-1 names/IDs + originality declaration (collect signatures), GenAI declaration, references, lab topology diagram, export & **submit** `Report_P1-6.pdf`. |
+| **Nicholas** | Report owner | Assemble the 3 CVE sections + intro/methodology/conclusion, formatting (11-pt Calibri, ≤10 pages), Page-1 names/IDs + originality declaration (collect signatures), GenAI declaration, references, lab topology diagram, export & **submit** `Report_P6-6.pdf`. |
 | **LyChii / Jerry** | Demo coordinator | Build the 30-min run sheet, run the **timed rehearsal** from a fresh snapshot, record the fallback video, keep time on the day, QA everyone's evidence. |
 
 *(Everyone must be present at the demo and able to explain ≥1 CVE — instructors can ask anyone.)*
@@ -68,7 +68,7 @@ Each owner: reproduces the exploit, captures evidence, verifies the CVSS score, 
 - [ ] Appendix: screenshots/evidence + lab topology diagram + full CVSS vectors
 - [ ] References (official CVE records + Apache 2.4.69 advisory)
 - [ ] **GenAI-use declaration** (state which parts were AI-assisted — allowed under SIT policy)
-- [ ] 11-pt Calibri, ≤10 pages (excl. cover/refs/appendix), PDF named `Report_P1-6.pdf`
+- [ ] 11-pt Calibri, ≤10 pages (excl. cover/refs/appendix), PDF named `Report_P6-6.pdf`
 - [ ] Submit to Xsite Dropbox by **Mon 9 Nov 23:59**
 
 ---

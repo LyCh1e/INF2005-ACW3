@@ -1,4 +1,4 @@
-# ACW3 Target Environment (Group P1-6)
+# ACW3 Target Environment (Group P6-6)
 
 A minimal Apache HTTP Server 2.4.68 target (fixed in 2.4.69) for the three approved CVEs.
 This folder sets up the **server only** — WebDAV, digest auth, and a reverse proxy enabled,
