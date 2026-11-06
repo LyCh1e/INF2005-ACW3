@@ -33,11 +33,6 @@ if [[ "${1:-}" == "down" ]]; then
   exit 0
 fi
 
-NO_CACHE=()
-if [[ "${1:-}" == "--no-cache" ]]; then
-  NO_CACHE=(--no-cache)
-fi
-
 echo "==> Checking Docker is running"
 if ! docker info >/dev/null 2>&1; then
   echo "Docker does not appear to be running. Start Docker Desktop (or the"
@@ -58,7 +53,11 @@ if [[ ! -f "$DIGEST_FILE" ]]; then
 fi
 
 echo "==> Building images from the latest source"
-compose build "${NO_CACHE[@]}"
+if [[ "${1:-}" == "--no-cache" ]]; then
+  compose build --no-cache
+else
+  compose build
+fi
 
 echo "==> Starting the lab (recreating containers with the new images)"
 compose up -d --force-recreate
