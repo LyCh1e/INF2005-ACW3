@@ -1,0 +1,44 @@
+# PATCHED lab environment — all three CVE mitigations applied.
+# Uses httpd-patched.conf instead of httpd-vuln.conf.
+#
+# Usage:
+#   1. Stop the vulnerable lab:   docker compose down
+#   2. Start the patched lab:     docker compose -f docker-compose-patched.yml up -d --build
+#   3. Re-run the same exploit scripts — they should all FAIL
+#   4. Switch back to vulnerable:
+#        docker compose -f docker-compose-patched.yml down
+#        docker compose up -d
+
+services:
+  target:
+    image: httpd:2.4.68
+    container_name: acw3-target
+    ports:
+      - "8080:80"
+    mem_limit: 512m
+    memswap_limit: 512m
+    volumes:
+      # Only difference: mounts httpd-PATCHED.conf instead of httpd-vuln.conf
+      - ./conf/httpd-patched.conf:/usr/local/apache2/conf/extra/httpd-vuln.conf:ro
+      - ./conf/digest.passwd:/usr/local/apache2/conf/digest.passwd:ro
+      - ./conf/davlock:/usr/local/apache2/davlock:rw
+      - ./public:/usr/local/apache2/htdocs:ro
+      - ./www:/usr/local/apache2/htdocs/dav:rw
+    command: >
+      sh -c "
+      grep -qxF 'Include conf/extra/httpd-vuln.conf' /usr/local/apache2/conf/httpd.conf ||
+      echo 'Include conf/extra/httpd-vuln.conf' >> /usr/local/apache2/conf/httpd.conf &&
+      httpd-foreground
+      "
+    networks:
+      - labnet
+
+  backend:
+    build: ./backend
+    container_name: acw3-backend
+    networks:
+      - labnet
+
+networks:
+  labnet:
+    driver: bridge
