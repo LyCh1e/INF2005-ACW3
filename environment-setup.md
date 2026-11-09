@@ -1,10 +1,28 @@
 # How and Why We Built the Lab Environment
 
+## The Three CVEs We Chose
+
+Our team selected three CVEs from the module-approved list, all affecting Apache HTTP Server 2.4.68 (fixed in 2.4.69). Together they cover three distinct vulnerability classes — memory corruption, authentication bypass, and denial of service — and they chain together into a realistic attack narrative.
+
+| CVE | Module | What It Is | CVSS |
+|---|---|---|---|
+| **CVE-2026-93546** | `mod_dav_fs` | **Integer overflow (CWE-190).** A `PROPPATCH` request with thousands of XML namespace declarations overflows a size counter, causing runaway memory consumption and crashing the Apache worker. An authenticated attacker can repeatedly kill workers and permanently corrupt the on-disk property database. | 8.8 (High) |
+| **CVE-2026-73636** | `mod_auth_digest` | **Nonce replay (CWE-294).** When `AuthDigestNonceLifetime` is set to `0`, digest-auth nonces never expire. An attacker who sniffs a single `Authorization: Digest` header from the network can replay it hours or days later — no password cracking required. | 8.1 (High) |
+| **CVE-2026-63686** | `mod_xml2enc` | **NULL pointer dereference (CWE-476).** When Apache reverse-proxies a response whose declared charset does not match the actual byte encoding, the charset conversion filter hits an unhandled error code, sets a context pointer to NULL, and crashes the worker on the next loop iteration. Requires no authentication at all. | 7.5 (High) |
+
+**Why these three specifically?** They complement each other across the attack lifecycle:
+
+- **CVE-2026-73636** (nonce replay) is the entry point — a passive attacker on the network captures a legitimate user's digest credentials and can impersonate them indefinitely.
+- **CVE-2026-93546** (DAV overflow) is what the attacker does with those stolen credentials — now authenticated, they send the malicious PROPPATCH that crashes workers and corrupts data.
+- **CVE-2026-63686** (xml2enc crash) shows that even without credentials, an unauthenticated attacker can take down the proxy path from the outside.
+
+This gives the report a complete identify → exploit → chain → remediate arc, and it lets us demonstrate both authenticated and unauthenticated attack vectors on the same server.
+
+---
+
 ## Assignment Constraints
 
-The ACW3 spec requires us to demonstrate three vulnerabilities in a live, 30-minute demo
-with no setup time and only one attempt. That shaped every decision we made about the
-environment:
+Requirements:
 
 - It has to come up instantly — no manual installs, no "let me just configure this" on
   demo day.
