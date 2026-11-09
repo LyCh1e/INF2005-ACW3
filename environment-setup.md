@@ -43,11 +43,6 @@ chose Docker instead for several reasons:
    directly on the host kernel with minimal overhead, leaving resources free for the
    tools we run against it (Wireshark, curl, Python scripts).
 
-5. **No hypervisor dependency.** Some team members' machines had issues with
-   hardware virtualisation or conflicting hypervisors. Docker Desktop runs on all of
-   them without needing to enable VT-x, configure nested virtualisation, or debug
-   Hyper-V conflicts.
-
 The one trade-off is that Docker containers share the host kernel, so a kernel-level
 exploit could theoretically escape the container. That is not a concern here — all three
 of our CVEs are application-level bugs in Apache userspace code, not kernel exploits. The
