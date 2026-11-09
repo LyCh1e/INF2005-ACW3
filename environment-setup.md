@@ -12,10 +12,19 @@ environment:
   to the university network or the internet.
 - It has to be reproducible — if something breaks during rehearsal, we need to tear it
   down and rebuild from scratch in under a minute.
+- It has to support a **before-and-after demonstration** — run the exploit against the
+  vulnerable environment, show it succeed, then switch to the patched environment and show
+  the same exploit fail.
 
-Docker Compose was the answer we landed on. One `docker-compose.yml`, one command
-(`docker compose up -d --build`), and the entire lab is running. Tear it down with
-`docker compose down`, rebuild, and you are back to a clean state.
+Docker Compose was the answer we landed on. Two Compose files in the same directory:
+
+| File | Purpose | Command |
+|---|---|---|
+| `docker-compose.yml` | **Vulnerable** lab (Apache 2.4.68 + `httpd-vuln.conf`) | `docker compose up -d --build` |
+| `docker-compose-patched.yml` | **Patched** lab (Apache 2.4.68 + `httpd-patched.conf`) | `docker compose -f docker-compose-patched.yml up -d --build` |
+
+Tear either down with `docker compose [-f ...] down`, rebuild, and you are back to a
+clean state in under a minute.
 
 ### Why Docker Over a Virtual Machine
 
@@ -67,6 +76,9 @@ different VM or container per CVE. We dropped that idea for two reasons:
 
 We pinned the target to `httpd:2.4.68`, the exact Docker Hub image for the last affected
 version. No source patches, no custom builds — stock Apache with the bugs still in it.
+Both the vulnerable and patched Compose files use the same `httpd:2.4.68` image — the
+difference is purely the config overlay that gets mounted, proving that the mitigations
+are configuration-level fixes, not version upgrades.
 
 ---
 
@@ -116,6 +128,50 @@ proxied response, which is where the NULL dereference lives.
 The reason we kept everything in one config file rather than scattering directives across
 multiple files is traceability: anyone on the team can open `httpd-vuln.conf`, see exactly
 what was changed from the default Apache setup, and map each block to the CVE it supports.
+
+### Demo-Only Worker Cap (MaxRequestWorkers = 2)
+
+The stock `httpd:2.4.68` image runs the event MPM with ~400 worker threads. Killing one
+or two workers in a pool of 400 has no visible availability impact — the site keeps
+responding normally, which makes the denial-of-service angle impossible to demonstrate.
+
+To make the DoS visible we added an MPM override block at the top of `httpd-vuln.conf`:
+
+```
+ServerLimit         1
+StartServers        1
+ThreadsPerChild     2
+MaxRequestWorkers   2
+```
+
+This models a small production server: a single child process with only two threads. A
+crash request kills the child (both threads die), so the service is briefly unreachable.
+The exploit scripts fire concurrent crash requests to keep the child dead, producing
+visible **502 Bad Gateway** errors on ordinary victim requests until the flood stops.
+
+This block does **not** change whether the bugs exist — it only shrinks capacity so the
+denial-of-service is demonstrable in a browser or terminal. The patched config
+(`httpd-patched.conf`) omits this block entirely, reverting to the default pool size.
+
+---
+
+### The Patched Config (`httpd-patched.conf`)
+
+The patched config lives alongside the vulnerable one in `conf/` and applies three
+mitigations — one per CVE — while keeping the same site structure so the exploit scripts
+can still run and demonstrably **fail** at the vulnerability step:
+
+| CVE | Vulnerable setting | Patched setting | Effect on exploit |
+|---|---|---|---|
+| CVE-2026-93546 | `LimitXMLRequestBody 0` (unlimited) | `LimitXMLRequestBody 102400` (100 KB) | Apache rejects the ~0.8 MB PROPPATCH payload with **413** before parsing |
+| CVE-2026-73636 | `AuthDigestNonceLifetime 0` (never expire) | `AuthDigestNonceLifetime 60` (60 seconds) | Replayed nonce expires and returns **401** |
+| CVE-2026-63686 | `mod_xml2enc` + `proxy-html` filter loaded | Both modules **commented out** | Proxy still works but charset conversion never runs — no crash |
+
+The demo workflow is:
+
+1. Start the vulnerable lab, run all three exploits — they **succeed**.
+2. `docker compose down`, then `docker compose -f docker-compose-patched.yml up -d --build`.
+3. Re-run the same exploit scripts — they **fail**, proving the mitigations work.
 
 ---
 
